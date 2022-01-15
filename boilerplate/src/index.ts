@@ -1,18 +1,42 @@
 import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+if (!process.env.SERVER_PORT) {
+  // tslint:disable-next-line:no-console
+  console.log('No SERVER_PORT env var found!');
+  process.exit(1);
+}
+const PORT: number = parseInt(process.env.SERVER_PORT as string, 10);
+
 const app = express();
-const port = 8080;
+
+// our potential frontend app
+const corsOptions = {
+  origin: 'http://localhost:8081',
+};
+
+// server middleware
+app.use(helmet());
+app.use(cors(corsOptions));
+
+// parse requests of content-type - application/json
+app.use(express.json());
 
 // define a route handler for the default home page
 app.get('/', (req, res) => {
-  res.send('Hello world!');
+  res.json({ message: 'Hello World!' });
 });
 
 app.get('/goodbye', (req, res) => {
-  res.send('Goodbye world!');
+  res.json({ message: 'Goodbye World!' });
 });
 
 // start the Express server
-app.listen(port, () => {
+app.listen(PORT, () => {
   // tslint:disable-next-line:no-console
-  console.log(`server started at http://localhost:${port}`);
+  console.log(`server started at http://localhost:${PORT}`);
 });
