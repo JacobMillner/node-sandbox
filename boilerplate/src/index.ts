@@ -14,14 +14,9 @@ const PORT: number = parseInt(process.env.SERVER_PORT as string, 10);
 
 const app = express();
 
-// our potential frontend app
-const corsOptions = {
-  origin: 'http://localhost:8081',
-};
-
 // server middleware
 app.use(helmet());
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
